@@ -1,0 +1,3 @@
+Simple script that does two things:
+- Traverses a directory searching for .properties files transforming each key in those files into a line in a CSV spreadsheet and each language into a column.
+- Reads a csv file transforming a set of lines with the same first column into .properties files (one for each language column as describe before) with key and translation and putting them on the right folder structure.
