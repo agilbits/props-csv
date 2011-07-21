@@ -23,8 +23,8 @@ class KeyGroup
   
   def add_translation(key, language, value)
     add_key(key)
-    @languages << language unless @languages.include? language
     @keys[key][language] = value
+    @languages << language unless @languages.include? language
   end
   
   def translation_for(key, language)

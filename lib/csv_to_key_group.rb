@@ -12,11 +12,12 @@ class CSVToKeyGroup
   
   private
   def load_groups(csv)
-    languages = csv[0]
+    headers = csv[0]
     csv[1..-1].each do |row|
       group = @store.group(row[0])
-      (2..languages.size).each do |language_index|
-        group.add_translation(row[1], languages[language_index], row[language_index])
+      (2..headers.size).each do |language_index|
+        language = headers[language_index]
+        group.add_translation(row[1], language, row[language_index])
       end
     end
   end
