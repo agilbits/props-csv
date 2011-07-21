@@ -80,7 +80,7 @@ describe PropertyParser do
     @io.puts "test=multi \\nline contents"
     @io.rewind
     
-    @parser.parse(@io).should == {'test' => 'multi \\nline contents'}
+    @parser.parse(@io).should == {'test' => "multi \nline contents"}
   end
 
   it "should parse last value ending with slash normally" do

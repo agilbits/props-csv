@@ -12,12 +12,12 @@ class PropertyParser
       if(value.end_with?('\\'))
         value[-1] = ' '
       elsif key
-        @values[key] = value
+        @values[key] = value.gsub("\\n", "\n")
         key = nil
       end
     end
     
-    @values[key] = value if key
+    @values[key] = value.gsub("\\n", "\n") if key
     @values
   end
   
