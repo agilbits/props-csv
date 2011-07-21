@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require File.expand_path("../../lib/key_group_factory.rb", __FILE__)
 
 describe KeyGroupFactory do
@@ -28,30 +29,23 @@ describe KeyGroupFactory do
   end
   
   context "for groups with keys" do
-    # TODO Add test to verify force_encoding is there
+    before do
+      @to_IO = lambda { |path|  StringIO.new }
+      @mock_parser = mock(PropertyParser)
+      PropertyParser.should_receive(:new).any_number_of_times.and_return(@mock_parser)
+    end
+    
     it "should load group with single key" do
-      @to_IO = lambda { |path| io = StringIO.new; io.puts 'test=valu\'e'; io.rewind; io }
+      @mock_parser.should_receive(:parse).and_return({'test' => 'value'})
+
       factory = KeyGroupFactory.new ['path/messages.properties'], @to_IO
       group = factory.groups[0]
       group.keys.should == ['test']
     end
     
-    it "should not load comments" do
-      @to_IO = lambda { |path| io = StringIO.new; io.puts '# nice property comment'; io.rewind; io }
-      factory = KeyGroupFactory.new ['path/messages.properties'], @to_IO
-      group = factory.groups[0]
-      group.keys.should == []
-    end
-    
     it "should load group with several keys" do
-      @to_IO = lambda { |path| io = StringIO.new; io.puts 'test=value'; io.puts 'another=key'; io.rewind; io }
-      factory = KeyGroupFactory.new ['path/messages.properties'], @to_IO
-      group = factory.groups[0]
-      group.keys.should == ['test', 'another']
-    end
+      @mock_parser.should_receive(:parse).and_return({'test' => 'value', 'another' => 'key'})
 
-    it "should trim keys" do
-      @to_IO = lambda { |path| io = StringIO.new; io.puts ' test =value'; io.puts 'another  =key'; io.rewind; io }
       factory = KeyGroupFactory.new ['path/messages.properties'], @to_IO
       group = factory.groups[0]
       group.keys.should == ['test', 'another']
@@ -59,7 +53,8 @@ describe KeyGroupFactory do
 
     context "regarding translations" do
       it "default should be available for each key" do
-        @to_IO = lambda { |path| io = StringIO.new; io.puts 'test= value '; io.puts 'another=  key    '; io.rewind; io }
+        @mock_parser.should_receive(:parse).and_return({'test' => 'value', 'another' => 'key'})
+
         factory = KeyGroupFactory.new ['path/messages.properties'], @to_IO
         group = factory.groups[0]
         group.translation_for('test', '').should == 'value'
@@ -67,15 +62,8 @@ describe KeyGroupFactory do
       end
       
       it "should load all translations" do
-        @to_IO = lambda do |path|
-          io = StringIO.new;
-          if /pt_BR/.match path
-            io.puts 'test= valor '; 
-          else
-            io.puts 'test= value '; 
-          end
-          io.rewind; io
-        end
+        @mock_parser.should_receive(:parse).and_return({'test' => 'value'}, {'test' => 'valor'})
+
         factory = KeyGroupFactory.new ['path/messages.properties', 'path/messages_pt_BR.properties'], @to_IO
         group = factory.groups[0]
         group.translation_for('test', '').should == 'value'
