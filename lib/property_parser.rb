@@ -1,11 +1,14 @@
 class PropertyParser
-  def initialize
+  def initialize(from_encoding, to_encoding)
     @values = {}
+    @from_encoding = from_encoding
+    @to_encoding = to_encoding
   end
   
   def parse(io)
     key = nil
     value = nil
+    io.set_encoding(@from_encoding)
     while(line = read_line(io)) do
       key, value = parse_line(line, key, value)
       
@@ -24,11 +27,7 @@ class PropertyParser
   private
   def read_line(io)
     line = io.gets
-    if(line)
-      # FIXME Force encoding? SUCKS!
-      line.force_encoding("ISO-8859-1")
-      line.encode("UTF-8")
-    end
+    line.encode(@to_encoding) if line
   end
   
   def parse_line(line, key, value)

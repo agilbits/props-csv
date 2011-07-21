@@ -5,7 +5,7 @@ require File.expand_path("../key_group_factory.rb", __FILE__)
 scanner = FolderScanner.new(ARGV[0])
 files = scanner.property_files(:exclude => ['/bin/', '/StoryTouch-', '/org.eclipse.jface/', '/org.eclipse.ui.workbench/','/jre_', '/version', '/build'])
 
-factory = KeyGroupFactory.new(files, lambda {|path| File.new(path)} )
+factory = KeyGroupFactory.from_properties(files, "ISO-8859-1")
 groups = factory.groups
 
 CSV.open("translations.csv", "wb") do |csv|

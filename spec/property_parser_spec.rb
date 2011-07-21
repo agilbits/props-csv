@@ -3,7 +3,7 @@ require File.expand_path("../../lib/property_parser.rb", __FILE__)
 
 describe PropertyParser do
   before do
-    @parser = PropertyParser.new
+    @parser = PropertyParser.new("UTF-8", "UTF-8")
     @io = StringIO.new
   end
   
@@ -41,22 +41,40 @@ describe PropertyParser do
     @parser.parse(@io).should == {'test' => 'value', 'another' => 'key'}
   end
 
-  # TODO Add test to verify force_encoding is there (or remove force_encoding)
-  it "should parse encoded values" do
-    @io.set_encoding("ISO-8859-1")
-    @io.puts "test=valué".encode("ISO-8859-1")
-    @io.rewind
+  context "regarding encoding" do  
+    it "should parse UTF-8 encoded values" do
+      @io.puts "test=valué"
+      @io.rewind
     
-    @parser.parse(@io).should == {'test' => 'valué'}
-  end
-  
-  it "should parse multiline encoded values" do
-    @io.set_encoding("ISO-8859-1")
-    @io.puts "test=valué\\".encode("ISO-8859-1")
-    @io.puts "éulav".encode("ISO-8859-1")
-    @io.rewind
+      @parser.parse(@io).should == {'test' => 'valué'}
+    end
     
-    @parser.parse(@io).should == {'test' => 'valué éulav'}
+    it "should parse ISO-8859-1 encoded values" do
+      @io.set_encoding("ISO-8859-1")
+      @io.puts "test=valué".encode("ISO-8859-1")
+      @io.rewind
+      
+      @parser = PropertyParser.new("ISO-8859-1", "UTF-8")
+      @parser.parse(@io).should == {'test' => 'valué'}
+    end
+
+    it "should parse multiline ISO-8859-1 encoded values" do
+      @io.set_encoding("ISO-8859-1")
+      @io.puts "test=valué\\".encode("ISO-8859-1")
+      @io.puts "éulav".encode("ISO-8859-1")
+      @io.rewind
+
+      @parser = PropertyParser.new("ISO-8859-1", "UTF-8")
+      @parser.parse(@io).should == {'test' => 'valué éulav'}
+    end
+    
+    it "should parse UTF-8 encoded values to ISO-8859-1 values" do
+      @io.puts "test=valué"
+      @io.rewind
+    
+      @parser = PropertyParser.new("UTF-8", "ISO-8859-1")
+      @parser.parse(@io).should == {'test' => 'valué'.encode("ISO-8859-1")}
+    end
   end
 
   it "should parse value with multiple lines" do
