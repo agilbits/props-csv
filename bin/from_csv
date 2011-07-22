@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'csv'
-require "props-csv"
+require 'props-csv'
 
 if(ARGV.length == 0)
   puts """Reads a CSV with translation keys and saves translation property files to the given languages. The CSV must have at least three columns:
@@ -35,9 +35,9 @@ else
     options[match[1]] = match[2]
   end
   
-  contents = CSV.read(csv_path)
+  contents = PropsCSV::CSV.read(csv_path)
 
-  factory = KeyGroupFactory.from_csv(contents)
+  factory = PropsCSV::KeyGroupFactory.from_csv(contents)
   groups = factory.groups
 
   if(options['l'])
@@ -47,7 +47,7 @@ else
   end
 
   groups.each do |group|
-    exporter = PropertyExporter.new(group, lambda {|path| File.open(path, 'w')}, options['out'], options['in'])
+    exporter = PropsCSV::PropertyExporter.new(group, lambda {|path| File.open(path, 'w')}, options['out'], options['in'])
     languages.each do |language|
       # FIXME Exporting default language is not working.
       # Use _ for the default language (file.properties, for example).

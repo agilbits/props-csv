@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'csv'
-require File.expand_path("../folder_scanner.rb", __FILE__)
-require File.expand_path("../key_group_factory.rb", __FILE__)
+require 'props-csv'
 
 if(ARGV.length == 0)
   puts """Scans a given directory recursively for property files (.properties) with translations and generates one CSV with everything. The CSV will have at least three columns:
@@ -39,10 +38,10 @@ else
     options[match[1]] = match[2]
   end
 
-  scanner = FolderScanner.new(directory_path)
+  scanner = PropsCSV::FolderScanner.new(directory_path)
   files = scanner.property_files(:exclude => options['x'].split(","))
 
-  factory = KeyGroupFactory.from_properties(files, options['in'], options['out'])
+  factory = PropsCSV::KeyGroupFactory.from_properties(files, options['in'], options['out'])
   groups = factory.groups
 
   def to_csv(csv, groups)
