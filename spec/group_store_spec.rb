@@ -1,8 +1,8 @@
-require File.expand_path("../../lib/group_store.rb", __FILE__)
+require File.expand_path("../spec_helper.rb", __FILE__)
 
-describe GroupStore do
+describe PropsCSV::GroupStore do
   before do
-    @store = GroupStore.new
+    @store = PropsCSV::GroupStore.new
   end
   
   it "should be empty at start" do
@@ -10,7 +10,7 @@ describe GroupStore do
   end
   
   it "should return new group with given id if asked group with unstored id" do
-    @store.group("messages").should == KeyGroup.new("messages")
+    @store.group("messages").should == PropsCSV::KeyGroup.new("messages")
   end
 
   it "should return stored group if asked group with stored id" do
@@ -21,6 +21,6 @@ describe GroupStore do
   it "should store all groups with different ids" do
     @store.group("messages")
     @store.group("plugin")
-    @store.groups.should == [KeyGroup.new("messages"), KeyGroup.new("plugin")]
+    @store.groups.should == [PropsCSV::KeyGroup.new("messages"), PropsCSV::KeyGroup.new("plugin")]
   end
 end

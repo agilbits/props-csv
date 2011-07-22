@@ -1,6 +1,6 @@
+#!/usr/bin/env ruby
 require 'csv'
-require File.expand_path("../key_group_factory.rb", __FILE__)
-require File.expand_path("../property_exporter.rb", __FILE__)
+require "props-csv"
 
 if(ARGV.length == 0)
   puts """Reads a CSV with translation keys and saves translation property files to the given languages. The CSV must have at least three columns:

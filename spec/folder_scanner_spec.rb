@@ -1,14 +1,14 @@
-require File.expand_path("../../lib/folder_scanner.rb", __FILE__)
+require File.expand_path("../spec_helper.rb", __FILE__)
 
-describe FolderScanner do
+describe PropsCSV::FolderScanner do
   it "should be created with a path" do
-    scanner = FolderScanner.new('spec')
+    scanner = PropsCSV::FolderScanner.new('spec')
     scanner.property_files.should == []
   end
   
   context "existing folder" do
     before do
-      @scanner = FolderScanner.new("resources")
+      @scanner = PropsCSV::FolderScanner.new("resources")
     end
     
     it "should find a property file in the given folder" do

@@ -1,9 +1,9 @@
 # encoding: UTF-8
-require File.expand_path("../../lib/property_parser.rb", __FILE__)
+require File.expand_path("../spec_helper.rb", __FILE__)
 
-describe PropertyParser do
+describe PropsCSV::PropertyParser do
   before do
-    @parser = PropertyParser.new("UTF-8", "UTF-8")
+    @parser = PropsCSV::PropertyParser.new("UTF-8", "UTF-8")
     @io = StringIO.new
   end
   
@@ -54,7 +54,7 @@ describe PropertyParser do
       @io.puts "test=valué".encode("ISO-8859-1")
       @io.rewind
       
-      @parser = PropertyParser.new("ISO-8859-1", "UTF-8")
+      @parser = PropsCSV::PropertyParser.new("ISO-8859-1", "UTF-8")
       @parser.parse(@io).should == {'test' => 'valué'}
     end
 
@@ -64,7 +64,7 @@ describe PropertyParser do
       @io.puts "éulav".encode("ISO-8859-1")
       @io.rewind
 
-      @parser = PropertyParser.new("ISO-8859-1", "UTF-8")
+      @parser = PropsCSV::PropertyParser.new("ISO-8859-1", "UTF-8")
       @parser.parse(@io).should == {'test' => 'valué éulav'}
     end
     
@@ -72,7 +72,7 @@ describe PropertyParser do
       @io.puts "test=valué"
       @io.rewind
     
-      @parser = PropertyParser.new("UTF-8", "ISO-8859-1")
+      @parser = PropsCSV::PropertyParser.new("UTF-8", "ISO-8859-1")
       @parser.parse(@io).should == {'test' => 'valué'.encode("ISO-8859-1")}
     end
   end

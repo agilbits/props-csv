@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'csv'
 require File.expand_path("../folder_scanner.rb", __FILE__)
 require File.expand_path("../key_group_factory.rb", __FILE__)

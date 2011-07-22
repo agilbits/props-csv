@@ -1,14 +1,12 @@
+PATH
+  remote: .
+  specs:
+    props-csv (0.0.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    ZenTest (4.5.0)
-    autotest (4.4.6)
-      ZenTest (>= 4.4.1)
-    autotest-notification (2.3.3)
-      autotest-standalone (~> 4.5)
-    autotest-standalone (4.5.5)
     diff-lcs (1.1.2)
-    method_finder (0.0.1)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -22,7 +20,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autotest
-  autotest-notification
-  method_finder
+  props-csv!
   rspec

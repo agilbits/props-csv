@@ -1,8 +1,8 @@
-require File.expand_path("../../lib/key_group.rb", __FILE__)
+require File.expand_path("../spec_helper.rb", __FILE__)
 
-describe KeyGroup do
+describe PropsCSV::KeyGroup do
   before do
-    @group = KeyGroup.new('project/i18n/br/com/agilbits/messages')
+    @group = PropsCSV::KeyGroup.new('project/i18n/br/com/agilbits/messages')
   end
   
   it "should be created with path" do
@@ -10,24 +10,24 @@ describe KeyGroup do
   end
   
   it "should remove language from path" do
-    @group = KeyGroup.new('project/i18n/br/com/agilbits/messages_en')
+    @group = PropsCSV::KeyGroup.new('project/i18n/br/com/agilbits/messages_en')
     @group.id.should == 'project/i18n/br/com/agilbits/messages'
   end
   
   it "should equal other key group with same path" do
-    other = KeyGroup.new('project/i18n/br/com/agilbits/messages')
+    other = PropsCSV::KeyGroup.new('project/i18n/br/com/agilbits/messages')
     @group.should == other
     other.should == @group
   end
   
   it "should not equal other key group with different path" do
-    other = KeyGroup.new('project/i18n/br/com/agilbits/plugin')
+    other = PropsCSV::KeyGroup.new('project/i18n/br/com/agilbits/plugin')
     @group.should_not == other
     other.should_not == @group
   end
   
   it "should equal other key group with same path but different language" do
-    other = KeyGroup.new('project/i18n/br/com/agilbits/messages_en')
+    other = PropsCSV::KeyGroup.new('project/i18n/br/com/agilbits/messages_en')
     @group.should == other
     other.should == @group
   end

@@ -1,11 +1,11 @@
 # encoding: UTF-8
-require File.expand_path("../../lib/property_exporter.rb", __FILE__)
+require File.expand_path("../spec_helper.rb", __FILE__)
 
-describe PropertyExporter do
+describe PropsCSV::PropertyExporter do
   before do
     @io = StringIO.new
-    @group = KeyGroup.new("messages")
-    @exporter = PropertyExporter.new(@group, lambda{|path| @io})
+    @group = PropsCSV::KeyGroup.new("messages")
+    @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @io})
   end
   
   it "should not export anything for empty group" do
@@ -74,7 +74,7 @@ describe PropertyExporter do
     it "should export value to encoding ISO-8859-1" do
       @group.add_translation("key", "", "valué")
 
-      @exporter = PropertyExporter.new(@group, lambda{|path| @io}, "ISO-8859-1")
+      @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @io}, "ISO-8859-1")
       @exporter.export('')
 
       @io.rewind
@@ -85,7 +85,7 @@ describe PropertyExporter do
     it "should export value to encoding MacRoman" do
       @group.add_translation("key", "", "valué")
 
-      @exporter = PropertyExporter.new(@group, lambda{|path| @io}, "MacRoman")
+      @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @io}, "MacRoman")
       @exporter.export('')
 
       @io.rewind
@@ -96,7 +96,7 @@ describe PropertyExporter do
     it "should export value from encoding ISO-8859-1" do
       @group.add_translation("key", "", "valué".encode("ISO-8859-1"))
 
-      @exporter = PropertyExporter.new(@group, lambda{|path| @io}, "UTF-8", "ISO-8859-1")
+      @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @io}, "UTF-8", "ISO-8859-1")
       @exporter.export('')
 
       @io.rewind
@@ -108,7 +108,7 @@ describe PropertyExporter do
   context "regarding path" do
     before do
       @calls = []
-      @exporter = PropertyExporter.new(@group, lambda{|path| @calls << path; @io})
+      @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @calls << path; @io})
     end
 
     it "should export default language to right path" do
@@ -124,8 +124,8 @@ describe PropertyExporter do
     end
 
     it "should export group to right path" do
-      @group = KeyGroup.new("plugin")
-      @exporter = PropertyExporter.new(@group, lambda{|path| @calls << path; @io})
+      @group = PropsCSV::KeyGroup.new("plugin")
+      @exporter = PropsCSV::PropertyExporter.new(@group, lambda{|path| @calls << path; @io})
       @exporter.export('pt_BR')
 
       @calls.should == ['./plugin_pt_BR.properties']
