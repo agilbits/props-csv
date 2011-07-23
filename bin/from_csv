@@ -21,11 +21,11 @@ Usage:
 Options:
 \t-in=<encoding>\tThe encoding of the CSV file. If no encoding is given, UTF-8 will be used.
 \t-out=<encoding>\tThe desired encoding of the property files. If no encoding is given, UTF-8 will be used.
-\t-l=<languages>\tA comma separated list of languages names as listed in the CSV header. If no language is given, property files for all languages in the CSV are generated.
+\t-l=<languages>\tA comma separated list of languages names as listed in the CSV header. If no language is given, property files for all languages in the CSV are generated. Use _ for the default language (file.properties, for example).
 
 Examples:
 \tfrom_csv translations.csv
-\tfrom_csv translations.csv -l=en
+\tfrom_csv translations.csv -l=_
 \tfrom_csv translations.csv -l=en,pt_BR -in=ISO-8859-1 -out=MacRoman
 """
 else
@@ -39,7 +39,7 @@ else
     options[match[1]] = match[2]
   end
   
-  contents = PropsCSV::CSV.read(csv_path)
+  contents = CSV.read(csv_path, :converters => [lambda {|celula| celula.nil? ? "" : celula} ])
 
   factory = PropsCSV::KeyGroupFactory.from_csv(contents)
   groups = factory.groups
@@ -53,10 +53,7 @@ else
   groups.each do |group|
     exporter = PropsCSV::PropertyExporter.new(group, lambda {|path| File.open(path, 'w')}, options['out'], options['in'])
     languages.each do |language|
-      # FIXME Exporting default language is not working.
-      # Use _ for the default language (file.properties, for example).
-      # \truby from_csv.rb translations.csv -l=_
-      # language = "" if language == "_"
+      language = "" if language == "_"
       exporter.export language
     end
   end
