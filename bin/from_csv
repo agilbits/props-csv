@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 require 'csv'
-require 'props-csv'
+begin
+  load File.expand_path("../../lib/props-csv.rb", __FILE__)
+rescue
+  require 'props-csv'
+end
 
 if(ARGV.length == 0)
   puts """Reads a CSV with translation keys and saves translation property files to the given languages. The CSV must have at least three columns:
@@ -12,7 +16,7 @@ if(ARGV.length == 0)
 The first row of the CSV should be a header row specifying the language of each language column.  
 
 Usage:
-\truby from_csv.rb <CSV_PATH> [options]
+\tfrom_csv <CSV_PATH> [options]
 
 Options:
 \t-in=<encoding>\tThe encoding of the CSV file. If no encoding is given, UTF-8 will be used.
@@ -20,9 +24,9 @@ Options:
 \t-l=<languages>\tA comma separated list of languages names as listed in the CSV header. If no language is given, property files for all languages in the CSV are generated.
 
 Examples:
-\truby from_csv.rb translations.csv
-\truby from_csv.rb translations.csv -l=en
-\truby from_csv.rb translations.csv -l=en,pt_BR -in=ISO-8859-1 -out=MacRoman
+\tfrom_csv translations.csv
+\tfrom_csv translations.csv -l=en
+\tfrom_csv translations.csv -l=en,pt_BR -in=ISO-8859-1 -out=MacRoman
 """
 else
   csv_path = ARGV[0]

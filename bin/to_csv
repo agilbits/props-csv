@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 require 'csv'
-require 'props-csv'
+begin
+  load File.expand_path("../../lib/props-csv.rb", __FILE__)
+rescue
+  require 'props-csv'
+end
 
 if(ARGV.length == 0)
   puts """Scans a given directory recursively for property files (.properties) with translations and generates one CSV with everything. The CSV will have at least three columns:
@@ -12,7 +16,7 @@ if(ARGV.length == 0)
 The first row of the CSV will be a header row specifying the language of each language column. The following row will contain available translations for each key of each file.
 
 Usage:
-\truby to_csv.rb <DIRECTORY_PATH> [options]
+\tto_csv <DIRECTORY_PATH> [options]
 
 Options:
 \t-f=<filepath>\tThe desired path to the CSV file. If no file path is given, the CSV will be written to standard output.
@@ -22,9 +26,9 @@ Options:
 \t\t\tIf the path for a property file contains one of the excluded patterns, this property file will be ignored.
 
 Examples:
-\truby to_csv.rb .
-\truby to_csv.rb . -f=translations.csv
-\truby to_csv.rb ./resources -f=translations.csv -x=/bin/,/build -in=ISO-8859-1 -out=MacRoman
+\tto_csv .
+\tto_csv . -f=translations.csv
+\tto_csv ./resources -f=translations.csv -x=/bin/,/build -in=ISO-8859-1 -out=MacRoman
 """
 else
   directory_path = ARGV[0]
